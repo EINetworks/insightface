@@ -39,14 +39,14 @@ reorganize_structure() {
                     ;;
                 sample)
                     # Copy the sample directory
-                    if [ -d "$arch_dir/InspireFace/sample" ]; then
-                        cp -r "$arch_dir/InspireFace/sample/"* "$base_path/$main_dir/$arch/"
+                    if [ -d "$arch_dir/sample" ]; then
+                        cp -r "$arch_dir/sample/"* "$base_path/$main_dir/$arch/"
                     fi
                     ;;
                 test)
                     # Copy the test directory
-                    if [ -d "$arch_dir/InspireFace/test" ]; then
-                        cp -r "$arch_dir/InspireFace/test/"* "$base_path/$main_dir/$arch/"
+                    if [ -d "$arch_dir/test" ]; then
+                        cp -r "$arch_dir/test/"* "$base_path/$main_dir/$arch/"
                     fi
                     ;;
             esac
@@ -59,9 +59,9 @@ reorganize_structure() {
     done
 
     # Delete the original architecture directories
-    for arch_dir in "${arch_dirs[@]}"; do
-        rm -rf "$arch_dir"
-    done
+    # for arch_dir in "${arch_dirs[@]}"; do
+    #     rm -rf "$arch_dir"
+    # done
 
     echo "Reorganization complete."
 }
@@ -104,14 +104,15 @@ build() {
         -DANDROID_NATIVE_API_LEVEL=${NDK_API_LEVEL} \
         -DANDROID_STL=c++_static \
         -DMNN_BUILD_FOR_ANDROID_COMMAND=true \
-        -DISF_BUILD_WITH_SAMPLE=OFF \
+        -DISF_BUILD_WITH_SAMPLE=ON \
         -DISF_BUILD_WITH_TEST=OFF \
         -DISF_ENABLE_BENCHMARK=OFF \
         -DISF_ENABLE_USE_LFW_DATA=OFF \
         -DISF_ENABLE_TEST_EVALUATION=OFF \
         -DISF_BUILD_SHARED_LIBS=ON \
         -DOpenCV_DIR=${OPENCV_DIR}
-    make -j4
+        -- VERBOSE=1
+    make -j16
     make install
     popd
     move_install_files "${BUILD_FOLDER_PATH}/${arch}"

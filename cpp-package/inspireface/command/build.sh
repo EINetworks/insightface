@@ -83,7 +83,7 @@ cmake -DCMAKE_BUILD_TYPE=Release \
   -DISF_BUILD_SHARED_LIBS=ON "$SCRIPT_DIR"
 
 # Compile and install
-make -j4
+make -j16
 make install
 
 # Move 'install' files to the build root directory using an absolute path
