@@ -118,6 +118,12 @@ int32_t FeatureBlockOpenCV::SearchNearest(const std::vector<float>& queryFeature
 
     cv::Mat queryMat(queryFeature.size(), 1, CV_32FC1, (void*)queryFeature.data());
 
+    // Normalize the queryMat if not already normalized
+    cv::normalize(queryMat, queryMat);
+    for (int i = 0; i < m_feature_matrix_.rows; ++i) {
+        cv::Mat row = m_feature_matrix_.row(i);
+        cv::normalize(row, row);
+    }
     // Calculate the cosine similarity matrix
     cv::Mat cosineSimilarities;
     cv::gemm(m_feature_matrix_, queryMat, 1, cv::Mat(), 0, cosineSimilarities);
