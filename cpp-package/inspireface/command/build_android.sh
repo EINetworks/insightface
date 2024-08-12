@@ -128,7 +128,7 @@ SCRIPT_DIR=$(pwd)  # Project dir
 BUILD_FOLDER_PATH="build/inspireface-android${TAG}"
 
 build arm64-v8a 21
-build armeabi-v7a 21
+# build armeabi-v7a 21
 
 reorganize_structure "${BUILD_FOLDER_PATH}"
 

@@ -83,8 +83,10 @@ int32_t FeatureHub::EnableHub(const DatabaseConfiguration &configuration, Matrix
         if (IsDirectory(m_db_configuration_.db_path)){
             std::string dbFile = m_db_configuration_.db_path + "/" + DB_FILE_NAME;
             ret = m_db_->OpenDatabase(dbFile);
+            INSPIRE_LOGW("opening database : %s\n",dbFile.c_str());
         } else {
             ret = m_db_->OpenDatabase(m_db_configuration_.db_path);
+            INSPIRE_LOGW("opening database : %s\n",m_db_configuration_.db_path.c_str());
         }
         if (ret != HSUCCEED) {
             INSPIRE_LOGE("An error occurred while opening the database: %d", ret);
@@ -94,7 +96,7 @@ int32_t FeatureHub::EnableHub(const DatabaseConfiguration &configuration, Matrix
         std::vector<FaceFeatureInfo> infos;
         ret = m_db_->GetTotalFeatures(infos);
         if (ret == HSUCCEED) {
-            if (infos.empty()) {
+            if (!infos.empty()) {
                 for (auto const &info: infos) {
                     ret = InsertFaceFeature(info.feature, info.tag, info.customId);
                     if (ret != HSUCCEED) {
