@@ -51,6 +51,10 @@ set(CPP_YAML_INCLUDE ${ISF_THIRD_PARTY_DIR}/yaml-cpp/include)
 # archive
 set(SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/middleware/model_archive/microtar/microtar.c)
 
+#mine
+set(SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/mine/mine.cpp)
+
+
 # MNN
 link_directories(${MNN_LIBS})
 
@@ -85,6 +89,9 @@ if(PLAT STREQUAL "linux")
     find_package(Threads REQUIRED)
     set(LINK_THIRD_LIBS ${LINK_THIRD_LIBS} ${CMAKE_THREAD_LIBS_INIT} dl)
 endif()
+
+set(NEED_INCLUDE ${NEED_INCLUDE} ${CMAKE_CURRENT_SOURCE_DIR}/mine/)
+message(STATUS "NEED_INCLUDE directories: ${NEED_INCLUDE}")
 
 target_include_directories(InspireFace PUBLIC
     ${NEED_INCLUDE}

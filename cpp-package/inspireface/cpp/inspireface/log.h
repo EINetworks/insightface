@@ -18,17 +18,17 @@
 // Android platform log macros
 #include <android/log.h>
 #define INSPIRE_ANDROID_LOG_TAG "InspireFace"
-#define INSPIRE_LOGD(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_DEBUG, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-#define INSPIRE_LOGI(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-#define INSPIRE_LOGW(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_WARN, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-#define INSPIRE_LOGE(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_ERROR, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-#define INSPIRE_LOGF(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_FATAL, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+// #define INSPIRE_LOGD(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_DEBUG, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+// #define INSPIRE_LOGI(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+// #define INSPIRE_LOGW(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_WARN, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+// #define INSPIRE_LOGE(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_ERROR, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+// #define INSPIRE_LOGF(...) inspire::LogManager::getInstance()->logAndroid(inspire::ISF_LOG_FATAL, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
 
-// #define INSPIRE_LOGD(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-// #define INSPIRE_LOGI(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-// #define INSPIRE_LOGW(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-// #define INSPIRE_LOGE(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
-// #define INSPIRE_LOGF(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+#define INSPIRE_LOGD(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+#define INSPIRE_LOGI(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+#define INSPIRE_LOGW(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+#define INSPIRE_LOGE(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
+#define INSPIRE_LOGF(...) __android_log_print(ANDROID_LOG_INFO, INSPIRE_ANDROID_LOG_TAG, __VA_ARGS__)
 
 #else
 // Standard platform log macros
