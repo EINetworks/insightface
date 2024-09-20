@@ -88,3 +88,4 @@ make install
 
 # Move 'install' files to the build root directory using an absolute path
 move_install_files "$(pwd)"
+cp /home/kartikeya/Office/Flutter/c++/insightface/cpp-package/inspireface/build/inspireface-linux-ubuntu/InspireFace/lib/libInspireFace.so /home/kartikeya/Office/Flutter/c++/library2/lib/inspireface/linux/
