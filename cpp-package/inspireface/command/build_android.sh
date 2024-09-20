@@ -95,6 +95,7 @@ build() {
     NDK_API_LEVEL=$2
     mkdir -p ${BUILD_FOLDER_PATH}/${arch}
     pushd ${BUILD_FOLDER_PATH}/${arch}
+    OPENCV_DIR="/home/kartikeya/Office/OpenCV-android-sdk/sdk/native/jni"
     cmake ${SCRIPT_DIR} \
         -G "Unix Makefiles" \
         -DCMAKE_BUILD_TYPE=Release \

@@ -44,7 +44,7 @@ public:
         m_tar_ = std::make_shared<mtar_t>();
         m_load_file_status_ = mtar_open(m_tar_.get(), archiveFile.c_str(), "r");
         if (m_load_file_status_ != MTAR_ESUCCESS) {
-            INSPIRE_LOGE("Invalid archive file: %d", m_load_file_status_);
+            INSPIRE_LOGE("Invalid archive file: %d %s", m_load_file_status_, archiveFile.c_str());
             m_tar_.reset();
             return m_load_file_status_;
         }

@@ -8,6 +8,7 @@
 #include "inspire_model/inspire_model.h"
 #include "yaml-cpp/yaml.h"
 #include "fstream"
+#include "mine.h"
 
 namespace inspire {
 
@@ -19,20 +20,20 @@ enum {
     NOT_READ = -15,
 };
 
-class INSPIRE_API InspireArchive: SimpleArchive {
+class INSPIRE_API InspireArchive : SimpleArchive {
 public:
     InspireArchive() : SimpleArchive() {
         m_status_ = NOT_READ;
     }
 
-    explicit InspireArchive(const std::string& archiveFile) : SimpleArchive(archiveFile) {
+    explicit InspireArchive(const std::string &archiveFile) : SimpleArchive(archiveFile) {
         m_status_ = QueryStatus();
         if (m_status_ == SARC_SUCCESS) {
             m_status_ = loadManifestFile();
         }
     }
 
-    int32_t ReLoad(const std::string& archiveFile) {
+    int32_t ReLoad(const std::string &archiveFile) {
         auto ret = Reset(archiveFile);
         if (ret != SARC_SUCCESS) {
             return ret;
@@ -51,10 +52,29 @@ public:
             if (ret != 0) {
                 return ret;
             }
-            auto &buffer = GetFileContent(model.name);
-            if (buffer.empty()) {
+            // auto &buffer = GetFileContent(model.name);
+            // if (buffer.empty()) {
+            //     return ERROR_MODEL_BUFFER;
+            // }
+            auto &encryptedBuffer = GetFileContent(model.name);
+            if (encryptedBuffer.empty()) {
                 return ERROR_MODEL_BUFFER;
             }
+            mine::ByteArray encryptedByteArray(encryptedBuffer.begin(), encryptedBuffer.end());
+
+            // Prepare the key and IV
+            mine::ByteArray key(
+              reinterpret_cast<const unsigned char *>(key_ei.data()),
+              reinterpret_cast<const unsigned char *>(key_ei.data()) + key_ei.size());
+
+            mine::ByteArray iv(
+              reinterpret_cast<const unsigned char *>(key_ei.data()),
+              reinterpret_cast<const unsigned char *>(key_ei.data()) + key_ei.size());
+
+            // Decrypt the buffer
+            mine::ByteArray decryptedBuffer = aes.decrypt(encryptedByteArray, &key, iv);
+            std::vector<char> buffer(decryptedBuffer.begin(), decryptedBuffer.end());
+
             model.SetBuffer(buffer, buffer.size());
             return SARC_SUCCESS;
         } else {
@@ -72,15 +92,39 @@ public:
     }
 
 private:
-
     int32_t loadManifestFile() {
         if (QueryLoadStatus() == SARC_SUCCESS) {
-            auto configBuffer = GetFileContent(MANIFEST_FILE);
-            configBuffer.push_back('\0');
-            if (configBuffer.empty()) {
+            // auto configBuffer = GetFileContent(MANIFEST_FILE);
+            // configBuffer.push_back('\0');
+            // if (configBuffer.empty()) {
+            //     return MISS_MANIFEST;
+            // }
+            // m_config_ = YAML::Load(configBuffer.data());
+            auto encryptedBuffer = GetFileContent(MANIFEST_FILE);
+
+            // Convert to mine::ByteArray if necessary
+            mine::ByteArray encryptedByteArray(encryptedBuffer.begin(), encryptedBuffer.end());
+
+            // Prepare the key and IV
+            mine::ByteArray key(
+              reinterpret_cast<const unsigned char *>(key_ei.data()),
+              reinterpret_cast<const unsigned char *>(key_ei.data()) + key_ei.size());
+
+            mine::ByteArray iv(
+              reinterpret_cast<const unsigned char *>(key_ei.data()),
+              reinterpret_cast<const unsigned char *>(key_ei.data()) + key_ei.size());
+
+            // Decrypt the buffer
+            mine::ByteArray decryptedBuffer = aes.decrypt(encryptedByteArray, &key, iv);
+
+            // Null-terminate the decrypted data
+            decryptedBuffer.push_back('\0');
+            if (decryptedBuffer.empty()) {
                 return MISS_MANIFEST;
             }
-            m_config_ = YAML::Load(configBuffer.data());
+
+            // Parse YAML from decrypted data
+            m_config_ = YAML::Load(reinterpret_cast<const char *>(decryptedBuffer.data()));
             if (!m_config_["tag"] || !m_config_["version"]) {
                 return FORMAT_ERROR;
             }
@@ -100,9 +144,10 @@ private:
 
     std::string m_tag_;
     std::string m_version_;
-
+    std::string key_ei = "time123456789123";
+    mine::AES aes;
 };
 
-}   // namespace inspire
+}  // namespace inspire
 
-#endif //MODELLOADERTAR_INSPIREARCHIVE_H
+#endif  // MODELLOADERTAR_INSPIREARCHIVE_H
