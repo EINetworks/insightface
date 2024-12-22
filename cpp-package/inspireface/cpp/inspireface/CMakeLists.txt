@@ -75,7 +75,9 @@ if (ISF_ENABLE_RKNN)
 endif ()
 
 if (ISF_BUILD_LINUX_ARM7 OR ANDROID)
+    if (ANDROID_ABI STREQUAL "armeabi-v7a")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpu=neon")
+    endif()
 endif()
 
 if (ISF_BUILD_LINUX_ARM7 OR ISF_BUILD_LINUX_AARCH64)
