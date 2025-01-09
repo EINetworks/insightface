@@ -159,6 +159,8 @@ int32_t InferenceHelperMnn::Initialize(char* model_buffer, int model_size, std::
         PRINT_E("Failed to load model model buffer\n");
         return kRetErr;
     }
+    printf("Model loaded successfully\n");
+
     MNN::ScheduleConfig scheduleConfig;
     scheduleConfig.numThread = num_threads_;    // it seems, setting 1 has better performance on Android
     MNN::BackendConfig bnconfig;
